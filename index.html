@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>S. Hasini Priya | Data Science & AI</title>
+
+    <style>
+        /* ==============================
+           RESET & GLOBAL
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #020711;
+            color: #eef8ff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(0, 210, 255, 0.13),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 75%,
+                    rgba(0, 102, 255, 0.14),
+                    transparent 30%
+                ),
+                #020711;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 200, 255, 0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 200, 255, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 85%
+            );
+        }
+
+
+        /* ==============================
+           CUSTOM CURSOR
+        ============================== */
+
+        .cursor-dot {
+            position: fixed;
+            width: 7px;
+            height: 7px;
+            background: #00d9ff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                0 0 10px #00d9ff,
+                0 0 25px rgba(0, 217, 255, 0.8);
+        }
+
+        .cursor-ring {
+            position: fixed;
+            width: 35px;
+            height: 35px;
+            border: 1px solid rgba(0, 217, 255, 0.65);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+
+            transition:
+                width 0.25s ease,
+                height 0.25s ease,
+                border-color 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .cursor-ring.active {
+            width: 60px;
+            height: 60px;
+            border-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.05);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.15);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #00bfe8;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.5;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+        }
+
+
+        /* ==============================
+           NAVBAR
+        ============================== */
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 20px 7%;
+
+            background: rgba(2, 7, 17, 0.78);
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(0, 210, 255, 0.12);
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #00d9ff;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #8497aa;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #00d9ff;
+        }
+
+
+        /* ==============================
+           HERO
+        ============================== */
+
+        .hero {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: auto;
+
+            padding: 140px 30px 80px;
+
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .eyebrow {
+            color: #00d9ff;
+            letter-spacing: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            line-height: 0.95;
+            letter-spacing: -5px;
+        }
+
+        .hero h1 span {
+            color: #00d9ff;
+        }
+
+        .title {
+            margin-top: 25px;
+            font-size: 21px;
+            color: #d4e6f2;
+        }
+
+        .bio {
+            margin-top: 15px;
+            max-width: 600px;
+            color: #8295a8;
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+
+            padding: 13px 21px;
+            border-radius: 10px;
+
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            background: rgba(0, 210, 255, 0.04);
+
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            border-color: #00d9ff;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.12);
+        }
+
+        .primary {
+            background: #00a8cc;
+            border-color: #00d9ff;
+            color: #001018;
+            font-weight: bold;
+        }
+
+
+        /* ==============================
+           AI CORE
+        ============================== */
+
+        .tech-orb {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .orb {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .core {
+            position: absolute;
+
+            width: 145px;
+            height: 145px;
+
+            top: 77px;
+            left: 77px;
+
+            border-radius: 18px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            background: linear-gradient(
+                145deg,
+                #0c2e42,
+                #04111d
+            );
+
+            border: 1px solid #00d9ff;
+
+            box-shadow:
+                0 0 25px rgba(0, 217, 255, 0.45),
+                inset 0 0 30px rgba(0, 217, 255, 0.08);
+
+            transform: translateZ(50px);
+        }
+
+        .core-main {
+            font-size: 42px;
+            font-weight: bold;
+            color: #00d9ff;
+            font-family: monospace;
+        }
+
+        .core small {
+            margin-top: 5px;
+            color: #759caf;
+            letter-spacing: 4px;
+            font-size: 10px;
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 217, 255, 0.35);
+        }
+
+        .ring1 {
+            inset: 20px;
+            transform: rotateX(70deg) rotateY(20deg);
+            animation: rotate1 8s linear infinite;
+        }
+
+        .ring2 {
+            inset: 0;
+            transform: rotateY(70deg);
+            border-color: rgba(0, 130, 255, 0.4);
+            animation: rotate2 10s linear infinite;
+        }
+
+        .ring3 {
+            inset: 40px;
+            transform: rotateX(30deg);
+            border-color: rgba(0, 217, 255, 0.25);
+            animation: rotate3 7s linear infinite;
+        }
+
+        .dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #00d9ff;
+            box-shadow: 0 0 15px #00d9ff;
+            animation: pulse 2s infinite;
+        }
+
+        .dot1 {
+            top: 20px;
+            left: 145px;
+        }
+
+        .dot2 {
+            bottom: 30px;
+            left: 45px;
+        }
+
+        .dot3 {
+            right: 30px;
+            top: 90px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.35;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.6);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes rotate1 {
+            to {
+                transform:
+                    rotateX(70deg)
+                    rotateY(20deg)
+                    rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate2 {
+            to {
+                transform:
+                    rotateY(430deg)
+                    rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate3 {
+            to {
+                transform:
+                    rotateX(30deg)
+                    rotateZ(360deg);
+            }
+        }
+
+
+        /* ==============================
+           SECTIONS
+        ============================== */
+
+        section.content {
+            max-width: 1200px;
+            margin: auto;
+            padding: 100px 30px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-number {
+            color: #00d9ff;
+            font-family: monospace;
+        }
+
+        .section-title h2 {
+            font-size: 40px;
+        }
+
+
+        /* ==============================
+           GLASS CARDS
+        ============================== */
+
+        .glass {
+            padding: 30px;
+            border-radius: 18px;
+
+            background: linear-gradient(
+                145deg,
+                rgba(255, 255, 255, 0.045),
+                rgba(0, 180, 255, 0.015)
+            );
+
+            border: 1px solid rgba(0, 210, 255, 0.12);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+            transition: 0.35s;
+        }
+
+        .glass:hover {
+            border-color: rgba(0, 217, 255, 0.35);
+            transform: translateY(-3px);
+        }
+
+
+        /* ==============================
+           ABOUT
+        ============================== */
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 0.5fr;
+            gap: 40px;
+        }
+
+        .about-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #d1e0e9;
+        }
+
+        .info {
+            display: grid;
+            gap: 20px;
+        }
+
+        .info strong {
+            display: block;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .info span {
+            color: #8095a6;
+        }
+
+
+        /* ==============================
+           SKILLS
+        ============================== */
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill {
+            padding: 10px 16px;
+            border-radius: 8px;
+
+            background: rgba(0, 210, 255, 0.035);
+
+            border: 1px solid rgba(0, 210, 255, 0.15);
+
+            color: #c8dbe5;
+
+            font-family: monospace;
+
+            transition: 0.3s;
+        }
+
+        .skill:hover {
+            transform: translateY(-5px);
+            border-color: #00d9ff;
+            color: #00d9ff;
+            box-shadow: 0 10px 25px rgba(0, 217, 255, 0.12);
+        }
+
+
+        /* ==============================
+           PROJECTS
+        ============================== */
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .project {
+            min-height: 230px;
+            padding: 25px;
+
+            border-radius: 16px;
+
+            background: linear-gradient(
+                145deg,
+                rgba(0, 210, 255, 0.055),
+                rgba(255, 255, 255, 0.018)
+            );
+
+            border: 1px solid rgba(0, 210, 255, 0.12);
+
+            transition: 0.4s;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project::before {
+            content: "";
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #00d9ff,
+                transparent
+            );
+
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .project:hover {
+            border-color: rgba(0, 217, 255, 0.45);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .project:hover::before {
+            opacity: 1;
+        }
+
+        .project-number {
+            color: #00d9ff;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        .project h3 {
+            margin-top: 15px;
+            font-size: 22px;
+        }
+
+        .project p {
+            margin-top: 12px;
+            color: #8095a6;
+            line-height: 1.7;
+        }
+
+        .project-tech {
+            margin-top: 18px;
+            color: #00bfe8;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+
+        /* ==============================
+           EDUCATION
+        ============================== */
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .two-column h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+            color: #00d9ff;
+        }
+
+        .two-column p {
+            color: #91a4b2;
+            line-height: 1.8;
+        }
+
+
+        /* ==============================
+           CONTACT
+        ============================== */
+
+        .contact {
+            text-align: center;
+        }
+
+        .contact-box {
+            text-align: center;
+        }
+
+        .contact-box p {
+            color: #91a4b2;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #dcecf4;
+
+            padding: 11px 18px;
+            border-radius: 9px;
+
+            border: 1px solid rgba(0, 210, 255, 0.15);
+
+            background: rgba(0, 210, 255, 0.035);
+
+            transition: 0.3s;
+        }
+
+        .links a:hover {
+            background: #00a8cc;
+            color: #001018;
+            transform: translateY(-4px);
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            text-align: center;
+            padding: 40px;
+
+            color: #526675;
+
+            border-top: 1px solid rgba(0, 210, 255, 0.08);
+
+            font-family: monospace;
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 850px) {
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 130px;
+            }
+
+            .tech-orb {
+                margin-top: 50px;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
+
+            .about-grid,
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 55px;
+                letter-spacing: -3px;
+            }
+
+            section.content {
+                padding: 70px 20px;
+            }
+
+            .cursor-dot,
+            .cursor-ring,
+            .cursor-trail {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+
+    <!-- NAVIGATION -->
+    <header>
+
+        <a href="#" class="logo">
+            HP<span>.</span>
+        </a>
+
+        <nav>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#education">Education</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div>
+
+            <p class="eyebrow">
+                TECH PORTFOLIO / 2026
+            </p>
+
+            <h1>
+                S. Hasini
+                <span>Priya</span>
+            </h1>
+
+            <p class="title">
+                B.Tech CSE – Data Science & Artificial Intelligence Student
+            </p>
+
+            <p class="bio">
+                I'm a technology enthusiast exploring Artificial Intelligence,
+                Data Science, Machine Learning and Software Development.
+                I enjoy building practical solutions to real-world problems.
+            </p>
+
+            <div class="buttons">
+
+                <a href="#projects" class="btn primary">
+                    View Projects
+                </a>
+
+                <a href="#contact" class="btn">
+                    Contact Me
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- AI CORE -->
+        <div class="tech-orb">
+
+            <div class="orb">
+
+                <div class="ring ring1"></div>
+                <div class="ring ring2"></div>
+                <div class="ring ring3"></div>
+
+                <div class="dot dot1"></div>
+                <div class="dot dot2"></div>
+                <div class="dot dot3"></div>
+
+                <div class="core">
+
+                    <div class="core-main">
+                        AI
+                    </div>
+
+                    <small>
+                        DATA
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="content" id="about">
+
+        <div class="section-title">
+
+            <span class="section-number">
+                01
+            </span>
+
+            <h2>
+                About Me
+            </h2>
+
+        </div>
+
+        <div class="glass about-grid">
+
+            <div>
+
+                <p class="about-text">
+                    I am a B.Tech Computer Science student specializing in
+                    Data Science and Artificial Intelligence. My interests
+                    include AI, Machine Learning, Data Science, Full-Stack
+                    Development and Software Engineering.
+
+                    <br><br>
+
+                    I am continuously improving my programming skills and
+                    working on projects that combine technology with
+                    real-world applications.
+                </p>
+
+            </div>
+
+
+            <div class="info">
+
+                <div>
+                    <strong>College</strong>
+                    <span>
+                        Dr. M.G.R. Educational and Research Institute
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Degree</strong>
+                    <span>
+                        B.Tech CSE – Data Science & AI
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Expected Graduation</strong>
+                    <span>
+                        2029
+                    </span>
+                </div>
+
+                <div>
+                    <strong>CGPA</strong>
+                    <span>
+                        8.1
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SKILLS -->
+    <section class="content" id="skills">
+
+        <div class="section-title">
+
+            <span class="section-number">
+                02
+            </span>
+
+            <h2>
+                Skills
+            </h2>
+
+        </div>
+
+        <div class="glass">
+
+            <div class="skills">
+
+                <span class="skill">Python</span>
+                <span class="skill">Java</span>
+                <span class="skill">C</span>
+                <span class="skill">Data Science</span>
+                <span class="skill">Artificial Intelligence</span>
+                <span class="skill">Machine Learning</span>
+                <span class="skill">Web Development</span>
+                <span class="skill">Full-Stack Development</span>
+                <span class="skill">SQL</span>
+                <span class="skill">Git</span>
+                <span class="skill">GitHub</span>
+                <span class="skill">Problem Solving</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECTS -->
+    <section class="content" id="projects">
+
+        <div class="section-title">
+
+            <span class="section-number">
+                03
+            </span>
+
+            <h2>
+                Projects
+            </h2>
+
+        </div>
+
+        <div class="projects">
+
+
+            <!-- PROJECT 1 -->
+            <article class="project">
+
+                <span class="project-number">
+                    PROJECT 01
+                </span>
+
+                <h3>
+                    SURAKSHA-XR
+                </h3>
+
+                <p>
+                    AR-Based Vocational Training Simulator for Industrial
+                    Safety. A mobile-first safety training concept designed
+                    to help industrial workers learn safety procedures using
+                    Augmented Reality, AI voice assistance and assessments.
+                </p>
+
+                <div class="project-tech">
+                    AR • AI • Android • Voice • Offline
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 2 -->
+            <article class="project">
+
+                <span class="project-number">
+                    PROJECT 02
+                </span>
+
+                <h3>
+                    Call Shield
+                </h3>
+
+                <p>
+                    A mobile security prototype designed to detect suspicious
+                    activities and possible cyber-fraud indicators while a
+                    phone call is taking place.
+                </p>
+
+                <div class="project-tech">
+                    Android • Kotlin • Security • Risk Detection
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 3 -->
+            <article class="project">
+
+                <span class="project-number">
+                    PROJECT 03
+                </span>
+
+                <h3>
+                    Personal AI Portfolio
+                </h3>
+
+                <p>
+                    A futuristic developer portfolio designed to present
+                    projects, technical skills, education and achievements
+                    through an interactive modern interface.
+                </p>
+
+                <div class="project-tech">
+                    HTML • CSS • JavaScript
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- EDUCATION -->
+    <section class="content" id="education">
+
+        <div class="section-title">
+
+            <span class="section-number">
+                04
+            </span>
+
+            <h2>
+                Education & Achievements
+            </h2>
+
+        </div>
+
+        <div class="two-column">
+
+
+            <!-- EDUCATION -->
+            <div class="glass">
+
+                <h3>
+                    Education
+                </h3>
+
+                <p>
+
+                    <strong>
+                        B.Tech CSE – Data Science & Artificial Intelligence
+                    </strong>
+
+                    <br><br>
+
+                    Dr. M.G.R. Educational and Research Institute,
+                    Chennai
+
+                    <br><br>
+
+                    Expected Graduation: 2029
+
+                    <br><br>
+
+                    CGPA: 8.1
+
+                </p>
+
+            </div>
+
+
+            <!-- ACHIEVEMENTS -->
+            <div class="glass">
+
+                <h3>
+                    Achievements
+                </h3>
+
+                <p>
+
+                    • Participating in Smart India Hackathon
+
+                    <br><br>
+
+                    • Working on SIH26041 – AR-Based Vocational
+                    Training Simulator for Industrial Safety
+
+                    <br><br>
+
+                    • Developing multiple AI, software and web
+                    development prototypes
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LANGUAGES -->
+    <section class="content">
+
+        <div class="section-title">
+
+            <span class="section-number">
+                05
+            </span>
+
+            <h2>
+                Languages
+            </h2>
+
+        </div>
+
+        <div class="glass">
+
+            <div class="skills">
+
+                <span class="skill">English</span>
+                <span class="skill">Telugu</span>
+                <span class="skill">Tamil</span>
+                <span class="skill">Hindi</span>
+                <span class="skill">Basic French</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="content contact" id="contact">
+
+        <div
+            class="section-title"
+            style="justify-content: center;"
+        >
+
+            <span class="section-number">
+                06
+            </span>
+
+            <h2>
+                Let's Connect
+            </h2>
+
+        </div>
+
+
+        <div class="glass contact-box">
+
+            <p>
+                Interested in collaborating, building projects,
+                or discussing technology and AI?
+            </p>
+
+
+            <div class="links">
+
+                <a href="mailto:priyahasini557@gmail.com">
+                    Email
+                </a>
+
+                <a
+                    href="https://github.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    GitHub
+                </a>
+
+                <a
+                    href="https://www.linkedin.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    LinkedIn
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        © <span id="year"></span>
+        S. Hasini Priya · Built with curiosity.
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        /* ==============================
+           CURRENT YEAR
+        ============================== */
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+
+        /* ==============================
+           CUSTOM CURSOR
+        ============================== */
+
+        const cursorDot =
+            document.querySelector(".cursor-dot");
+
+        const cursorRing =
+            document.querySelector(".cursor-ring");
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        let ringX = 0;
+        let ringY = 0;
+
+
+        document.addEventListener(
+            "mousemove",
+            function (event) {
+
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+
+                cursorDot.style.left =
+                    mouseX + "px";
+
+                cursorDot.style.top =
+                    mouseY + "px";
+
+            }
+        );
+
+
+        function animateCursor() {
+
+            ringX +=
+                (mouseX - ringX) * 0.15;
+
+            ringY +=
+                (mouseY - ringY) * 0.15;
+
+            cursorRing.style.left =
+                ringX + "px";
+
+            cursorRing.style.top =
+                ringY + "px";
+
+            requestAnimationFrame(
+                animateCursor
+            );
+        }
+
+        animateCursor();
+
+
+        /* ==============================
+           CURSOR INTERACTION
+        ============================== */
+
+        const interactiveElements =
+            document.querySelectorAll(
+                "a, .project, .skill, .glass"
+            );
+
+        interactiveElements.forEach(
+            element => {
+
+                element.addEventListener(
+                    "mouseenter",
+                    () => {
+                        cursorRing.classList.add(
+                            "active"
+                        );
+                    }
+                );
+
+                element.addEventListener(
+                    "mouseleave",
+                    () => {
+                        cursorRing.classList.remove(
+                            "active"
+                        );
+                    }
+                );
+
+            }
+        );
+
+
+        /* ==============================
+           CURSOR TRAIL
+        ============================== */
+
+        let trailTimer = 0;
+
+        document.addEventListener(
+            "mousemove",
+            function (event) {
+
+                if (
+                    Date.now() - trailTimer < 35
+                ) {
+                    return;
+                }
+
+                trailTimer = Date.now();
+
+                const trail =
+                    document.createElement("div");
+
+                trail.className =
+                    "cursor-trail";
+
+                trail.style.left =
+                    event.clientX + "px";
+
+                trail.style.top =
+                    event.clientY + "px";
+
+                document.body.appendChild(
+                    trail
+                );
+
+                setTimeout(
+                    () => {
+
+                        trail.style.opacity =
+                            "0";
+
+                        trail.style.transform =
+                            "scale(0.2)";
+
+                        trail.style.transition =
+                            "0.5s ease";
+
+                    },
+                    10
+                );
+
+                setTimeout(
+                    () => {
+                        trail.remove();
+                    },
+                    550
+                );
+
+            }
+        );
+
+
+        /* ==============================
+           PROJECT 3D EFFECT
+        ============================== */
+
+        const cards =
+            document.querySelectorAll(
+                ".project"
+            );
+
+        cards.forEach(
+            card => {
+
+                card.addEventListener(
+                    "mousemove",
+                    function (event) {
+
+                        const rect =
+                            card.getBoundingClientRect();
+
+                        const x =
+                            event.clientX -
+                            rect.left;
+
+                        const y =
+                            event.clientY -
+                            rect.top;
+
+                        const centerX =
+                            rect.width / 2;
+
+                        const centerY =
+                            rect.height / 2;
+
+                        const rotateX =
+                            ((y - centerY) /
+                                centerY) * -3;
+
+                        const rotateY =
+                            ((x - centerX) /
+                                centerX) * 3;
+
+                        card.style.transform =
+                            `translateY(-10px)
+                             perspective(600px)
+                             rotateX(${rotateX}deg)
+                             rotateY(${rotateY}deg)`;
+
+                    }
+                );
+
+
+                card.addEventListener(
+                    "mouseleave",
+                    function () {
+
+                        card.style.transform =
+                            "translateY(0) perspective(600px) rotateX(0) rotateY(0)";
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* ==============================
+           AI CORE MOUSE EFFECT
+        ============================== */
+
+        const orb =
+            document.querySelector(".orb");
+
+        document.addEventListener(
+            "mousemove",
+            function (event) {
+
+                const x =
+                    (event.clientX /
+                        window.innerWidth - 0.5) * 20;
+
+                const y =
+                    (event.clientY /
+                        window.innerHeight - 0.5) * 20;
+
+                orb.style.setProperty(
+                    "--mouse-x",
+                    x + "deg"
+                );
+
+                orb.style.setProperty(
+                    "--mouse-y",
+                    -y + "deg"
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
